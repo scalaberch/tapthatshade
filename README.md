@@ -25,15 +25,15 @@ To be published soon.
 - WAMP/MAMP
 
 ###Work Organization:###
-@scalaberch: Project Manager  
-@damskhie: Server Management/Database  
-@hillarylacida: Graphics Dev / QA / Doc  
-@jantaps2k: Game Engine (HTML5)  
-@ellenp: Game Engine (HTML5)  
+[scalaberch:](https://github.com/scalaberch, "GitHub") Project Manager  
+[damskhie:](https://github.com/damskhie, "GitHub") Server Management/Database  
+[hillarylacida:](https://github.com/hillarylacida, "GitHub") Graphics Dev / QA / Doc  
+[jantaps2k:](https://github.com/jantaps2k, "GitHub") Game Engine (HTML5)  
+[ellenp:](https://github.com/ellenp, "GitHub") Game Engine (HTML5)  
 
 ###Issues:###
->Please use the issue tracker [here](https://github.com/scalaberch/tapthatshade/issues, "Issue Tracker") to submit and >assign issues and/or tasks to every collaborator. If you have to post on our Facebook group, I will post it accordingly >to the issue tracker and assign it respectively. Contact me if there are any issues thereof.
+Please use the issue tracker [here](https://github.com/scalaberch/tapthatshade/issues, "Issue Tracker") to submit and assign issues and/or tasks to every collaborator. If you have to post on our Facebook group, I will post it accordingly to the issue tracker and assign it respectively. Contact me if there are any issues thereof.
   
   
-*Your PM (ug para maka graduate ta)*  
-*[scalaberch](https://github.com/scalaberch, "GitHub")*
+Happy Coding. (ug para maka graduate ta)  
+[scalaberch](https://github.com/scalaberch, "GitHub")
