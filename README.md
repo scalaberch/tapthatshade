@@ -27,12 +27,14 @@ To be published soon.
 ###Work Organization:
 @scalaberch: Project Manager  
 @damskhie: Server Management/Database  
-@hillarylacida: Graphics Dev / QA / Doc
+@hillarylacida: Graphics Dev / QA / Doc  
 @jantaps2k: Game Engine (HTML5)
 @ellenp: Game Engine (HTML5)
 
-###Issues
+###Issues:
+
 Please use the issue tracker [here](https://github.com/scalaberch/tapthatshade/issues, "Issue Tracker") to submit and assign issues and/or tasks to every collaborator. If you have to post on our Facebook group, I will post it accordingly to the issue tracker and assign it respectively. Contact me if there are any issues thereof.
 ---
+  
 *Your PM (ug para maka graduate ta)*  
 *@scalaberch*
