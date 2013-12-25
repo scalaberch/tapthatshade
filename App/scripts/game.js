@@ -29,12 +29,14 @@ var _screen = {
 	// These are the screen attributes...
 	// screenID(s) start with the hashtag/s.
 	screenID: null,
-	modalScreen: null,
+	modalScreen: null, modalTitle:null, modalContent:null,
 
 	// Initiator
 	__init: function(){
 		// Map attributes to jQuery objects...
-		this.modalScreen = $('#modalscreen');
+		this.modalScreen  = $('#modalscreen');
+		this.modalTitle   = $('#modalscreen-title');
+		this.modalContent = $('#modalscreen-body');
 
 		// Hide the modal screen first...
 		this.modalScreen.hide(0);
@@ -47,10 +49,13 @@ var _screen = {
 	},
 
 	showScreen: function(screenID){
-		if (this.isScreenModal(screenID)){
-
-		} else {
-
+		switch(screenID){
+			case "#highscorescreen":
+				_screen.showHighScoreScreen(); break;
+			case "#aboutscorescreen":
+				_screen.showAboutScoreScreen(); break;
+			default: // Won't do it.
+				console.log("Default action. No action");
 		}
 	},
 
@@ -64,6 +69,9 @@ var _screen = {
 
 	showHighScoreScreen: function(){
 
+
+		_screen.writeModalScreenTitle("Leaderboards");
+		_screen.showModalScreen();
 	},
 
 	showGameScreen: function(){
@@ -72,6 +80,9 @@ var _screen = {
 
 	showAboutScoreScreen: function(){
 
+
+		_screen.writeModalScreenTitle("About the App");
+		_screen.showModalScreen();
 	},
 
 	showQuitScreen: function(){
@@ -86,10 +97,10 @@ var _screen = {
 		this.modalScreen.slideUp(250);
 	},
 	writeModalScreenTitle: function(title){
-
+		this.modalTitle.html(title);
 	},
 	writeModalScreenContent:function(content){
-
+		this.modalContent.html(content);
 	}
 
 }
@@ -107,10 +118,7 @@ $(function(){
 
 	$('#main-menu-container a').click(function(){
 		var targetID = $(this).attr('page-target');
-
-		if (_screen.isScreenModal(targetID)){
-			_screen.showModalScreen();
-		}
+		_screen.showScreen(targetID);
 	});
 
 
