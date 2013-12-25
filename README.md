@@ -10,6 +10,7 @@ A project for CSc 193 (*Special topics in Computer Science*)
 - For ***App*** folder, please copy it to your cordova project filesystem.
 - For ***Server*** folder, this will be stored in our cloud server, but you may test the scripts using a virtual server embedded with PHP (WAMP, MAMP, LAMP).
 - For ***Graphics*** folder, it is just a repository for the images to be used. Final images will be used on the **App** folder.
+- To view the app in your browser, use [Screenfly](http://quirktools.com/screenfly/ "Screenfly") (online) or [Ripple Emulator](https://chrome.google.com/webstore/detail/ripple-emulator-beta/geelfhphabnejjhdalkjhgipohgpdnoc?hl=en "Google Chrome Store") (offline). For Screenfly, ***Always*** set your resolution to mobile view or tablet (you can choose what device you will be viewing) cause if on other viewports, patay.
 
 ###Repository Organization:###
 We have three (3) folders.
