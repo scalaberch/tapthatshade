@@ -116,10 +116,16 @@ $(function(){
 		_screen.hideModalScreen();
 	});
 
-	$('#main-menu-container a').click(function(){
+	$('.main-menu-btn').click(function(){
 		var targetID = $(this).attr('page-target');
 		_screen.showScreen(targetID);
 	});
 
+	// Main Menu MouseUp and MouseDown
+	$('.main-menu-btn').mousedown(function(){
+		$(this).css('background', 'linear-gradient(#fbaf5d, #fbaf5d)' );
+	}).mouseup(function(){
+		$(this).css('background', 'linear-gradient(#fcc284, #fbaf5d)' );
+	});
 
 });
