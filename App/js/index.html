@@ -10,40 +10,8 @@
 
 	<script type='text/javascript' src='jquery23.js'></script>
 	<script type='text/javascript' src='game.js'></script>
+	<script type='text/javascript' src='gamejquery.js'></script>
 
-
-	<script>
-	var isPlaying = false;
-	var myClicks = 0;
-	var limitClicks = 3;
-
-	var myAnswer = [];
-
-	$(function(){
-
-		$('#start').click(function(){
-			// Initialize board...
-
-			var board = _board.shuffleBoard(1); var a = 0;
-			$('.col-md-2').each(function(){
-				$(this).html(board[a]); a++;
-			});
-
-			isPlaying = true;
-		});
-
-		$('.col-md-2').click(function(){ //This should be mouseup
-			myClicks++;
-
-			if (myClicks >= limitClicks){
-				myClicks = 0;
-
-				//Check if 
-			}
-		});
-
-	});
-	</script>
 </head>
 <body>
 	<br><br><br>

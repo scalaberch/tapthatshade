@@ -14,11 +14,51 @@ var _gamePlay = {
 	myGuess:   [],
 
 	startPlaying: function(){ this.isPlaying = true;  },
-	stopPlaying : function(){ this.isPlaying = false; }
+	stopPlaying : function(){ this.isPlaying = false; },
 
 	addToMyGuess: function(){
 		
+	},
+
+
+	//TODO: This is the temporary action... Final action is on button click...
+	startGame: function(){
+
+	},
+
+	gameTimer: {
+
+		time: 121, timer: null,
+		start: function(){
+			// Manually starting the timer...
+			this.timer = setInterval(function(){
+				_gamePlay.gameTimer.tiktok()
+			}, 1000);
+		},
+		stop: function(){
+			// Manually stopping the timer...
+			if (this.timer != null){
+				clearInterval(this.timer);
+				this.timer = null;
+			}	
+		},
+		tiktok: function(){
+			this.time--;
+
+			console.log("Time remaining: "+this.showInFormat(this.time)+" seconds");
+			if (this.time == 0){
+				this.stop();
+			}
+		},
+		showInFormat: function(seconds){
+			var result = Math.floor(seconds/60) + ":";
+			if (seconds % 60 == 0){ result += "0"; }
+
+			return result + (seconds%60) + "";
+		}
+
 	}
+
 
 }
 
