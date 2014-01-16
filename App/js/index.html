@@ -1,0 +1,127 @@
+<html>
+<head>
+	<link rel='stylesheet' href='bootstrap.css' />
+	<style>
+	.col-md-2 {
+		border:1px solid #000;
+		height:60px;
+	}
+	</style>
+
+	<script type='text/javascript' src='jquery23.js'></script>
+	<script type='text/javascript' src='game.js'></script>
+
+
+	<script>
+	var isPlaying = false;
+	var myClicks = 0;
+	var limitClicks = 3;
+
+	var myAnswer = [];
+
+	$(function(){
+
+		$('#start').click(function(){
+			// Initialize board...
+
+			var board = _board.shuffleBoard(1); var a = 0;
+			$('.col-md-2').each(function(){
+				$(this).html(board[a]); a++;
+			});
+
+			isPlaying = true;
+		});
+
+		$('.col-md-2').click(function(){ //This should be mouseup
+			myClicks++;
+
+			if (myClicks >= limitClicks){
+				myClicks = 0;
+
+				//Check if 
+			}
+		});
+
+	});
+	</script>
+</head>
+<body>
+	<br><br><br>
+	<div class='container'>
+		<div class='row'>
+			<button id='start'>start</button>
+		</div>
+		<div class='row'>
+			<div class='col-md-2' id='0'>
+
+			</div>
+			<div class='col-md-2' id='1'>
+
+			</div>
+			<div class='col-md-2' id='2'>
+
+			</div>
+			<div class='col-md-2' id='3'>
+
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-md-2' id='4'>
+
+			</div>
+			<div class='col-md-2' id='5'>
+
+			</div>
+			<div class='col-md-2' id='6'>
+
+			</div>
+			<div class='col-md-2' id='7'>
+
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-md-2' id='8'>
+
+			</div>
+			<div class='col-md-2' id='9'>
+
+			</div>
+			<div class='col-md-2' id='10'>
+
+			</div>
+			<div class='col-md-2' id='11'>
+
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-md-2' id='12'>
+
+			</div>
+			<div class='col-md-2' id='13'>
+
+			</div>
+			<div class='col-md-2' id='14'>
+
+			</div>
+			<div class='col-md-2' id='15'>
+
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-md-2' id='16'>
+
+			</div>
+			<div class='col-md-2' id='17'>
+
+			</div>
+			<div class='col-md-2' id='18'>
+
+			</div>
+			<div class='col-md-2' id='19'>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

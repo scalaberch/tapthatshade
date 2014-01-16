@@ -5,17 +5,43 @@ var _facebook = {
 
 }
 
+var _me = {
+	
+}
 
 var _game = {
 	
 	// This checks if the player is playing or not.
 	isPlaying: false,
+	currenScore: 0,
 
 	// Loads the resources and stuff.
 	initGame: function(){
 
 	},
 
+	// Updates resources (audio/graphics) and stuff...
+	updateResources: function(){
+		// Playing Background Music
+		_sound.playBGAudio();
+	}
+
+}
+
+/*
+* Utilizes HTML5 Audio. This is for the actions of the audio
+*  	thingy: Background music and stuff.
+*/
+var _sound = {
+
+	mainMenuBG: new Audio(''),
+	mainMenuBG2: new Audio(''),
+
+	playBGAudio: function(){
+		if (_game.isPlaying){
+			mainMenuBG2.play();
+		} else { mainMenuBG.play(); }
+	}
 
 }
 
