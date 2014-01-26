@@ -48,5 +48,8 @@ function populateDB(tx) {
 		"score INTEGER, " +
 		"level INTEGER, " +
 		"timestamp CURRENT_TIMESTAMP)"; 
+		    tx.executeSql(sql);
+	// initial script....
+    tx.executeSql("INSERT INTO playerScore ()");
 }
     
