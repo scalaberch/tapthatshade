@@ -360,7 +360,7 @@ var _app = {
 
 
 		// Add the animation for the buttons and append to layer...
-		playGameButton.on('mouseup', function(evt){
+		playGameButton.on('mouseup touchend', function(evt){
 			console.log("I mouseup you!");
 
 			// Animate the layer upward, while getting the other layer downward...
@@ -377,7 +377,7 @@ var _app = {
 
 		    anim.start();
 
-		}).on('mousedown', function(){
+		}).on('mousedown touchstart', function(){
 			console.log("I mousedown you!");
 		});
 
