@@ -14,7 +14,10 @@ var _gamePlay = {
 	myGuess:   [],
 
 	playerStats: {
-		allowableClicks:3
+		allowableClicks:3,
+		initPlayerStats: function(){
+
+		}
 	},
 
 	startPlaying: function(){ this.isPlaying = true;  },
@@ -119,7 +122,22 @@ var __player = {
 		name: "Player Name", score: 0, fbToken: null
 	},
 
-	getPlayerName: function(){ return __player._data.name; }
+	getPlayerName: function(){ return __player._data.name; },
+	setPlayerName: function(name){ this._data.name = name; }
+
+}
+
+var _fb = {
+
+	fb: null,
+	ifFbLogin: function(){
+		if (this.fb == null){
+			return false;
+		} else { return true; }
+	},
+	init: function(){
+
+	}
 
 
 }
@@ -132,7 +150,6 @@ var __player = {
 
 var _board = {
 
-	jqueryBoardObj: null, // Assign this to jQuery handler
 	board: [0, 0, 0, 0, 
 			0, 0, 0, 0, 
 			0, 0, 0, 0,
@@ -202,8 +219,13 @@ var _board = {
 
 		// TODO: for now, "A" lang sa... ;)
 		for (var n=0; n<this.boardSize(); n++){
+			// Implement a funciton that gets an index randomly from
+			// 	the _characters indeces except the current element.
+			var random = 2; // Insert implementaiton here
+
+
 			if (places.indexOf(n) == -1){
-				this.assignToBoard(n, 2);
+				this.assignToBoard(n, random);
 			}
 		}
 
@@ -253,11 +275,20 @@ var _characters = [
 
 var _player = {
 
-	level:1
+	level:1,
+
+	// This function stores the data of the player.
+	// 	This could mean storing the data to the device 
+	//	or to the database.
+	storePlayerData: function(){
+
+	},
+
+	getFBCredentials: function(username, password){
+		
+	}
 
 }
-
-
 
 
 // This is the instantiator of the KineticJS. This handles everything right on
@@ -270,36 +301,109 @@ var _app = {
 	// Application Attributes
 
 
-	app: new Kinetic.Stage({
-	    container: 'gameContainer',
-	    width: 320, // for now, fixed w/h lang sa
-	    height: 480
-	}),
-
+	app: null, // Attribute for KineticJS Canvas
 
 	// Screens is an array of KineticJS Layers :)
-	screens: [
-		new Kinetic.Layer({ id:"LOADING_SCREEN" }),
-		new Kinetic.Layer({ id:"MAIN_SCREEN" })
-	],
+	// 	For now, it is still an empty array
+	screens: [],
 
 
 	// Application Initiator. Call this on start of the application.
 	__init__: function(){
+		// Get the width and height of the screen...
+		var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0];
+		var _width = w.innerWidth || e.clientWidth || g.clientWidth, _height = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+		// Load to app attribute.
+		this.app = new Kinetic.Stage({
+		    container: 'gameContainer',
+		    width: _width,
+		    height: _height
+		});
+
+		// Load main menu page and game page...
+		var mainMenuScreen = this.initMainMenuScreen(_width, _height); this.screens.push(mainMenuScreen);
+		var gameMenuScreen = this.initGameScreen(_width, _height); this.screens.push(gameMenuScreen);
+
+
 		// Call all initiators of pages...
-		_gameScreen.initAttach_ClickableGrid();
+		//_gameScreen.initAttach_ClickableGrid();
 
+		//this.app.add(_gameScreen._screen);
 
+		console.log(this.appWidth());
+		console.log(this.appHeight());
 
-
-		this.app.add(_gameScreen._screen);
-
+		// Add to the main app...
+		for (var i = 0; i < this.screens.length; i++) {
+			this.app.add(this.screens[i]);
+		};
 	},
 
 	// Methods...
 	appWidth:  function(){ return this.app.width();  },
-	appHeight: function(){ return this.app.height(); }
+	appHeight: function(){ return this.app.height(); },
 
+	// Method: initialize main menu screen
+	initMainMenuScreen: function(w, h){
+		// Initialize Layer...
+		var layer = new Kinetic.Layer({
+			width: w, height: h
+		});
+
+		// Add the background image...
+		var bg = new Kinetic.Rect({ fill:"red", width:w, height:h });
+		layer.add(bg);
+
+		// Add the buttons...
+		var playGameButton = new Kinetic.Rect({ fill:"green", width:w*0.6, height:h*0.10, x:w*0.25, y:h*0.7 });
+
+
+		// Add the animation for the buttons and append to layer...
+		playGameButton.on('mouseup', function(evt){
+			console.log("I mouseup you!");
+
+			// Animate the layer upward, while getting the other layer downward...
+				var amplitude = 150;
+		      var period = 2000;
+		      // in ms
+		      var centerX = stage.width()/2;
+
+
+			var anim = new Kinetic.Animation(function(frame) {
+				// TEMP
+		       _app.screens[0].setX(50 * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
+		    }, _app.app);
+
+		    anim.start();
+
+		}).on('mousedown', function(){
+			console.log("I mousedown you!");
+		});
+
+
+		layer.add(playGameButton);
+
+
+		return layer;
+	},
+
+	// Method: initialize game screen...
+	initGameScreen: function(w, h){
+		// Initialize Layer...
+		var layer = new Kinetic.Layer({
+			width: w, height: h,
+
+			// In this case, i'll put this layer BELOW the main menu screen....
+			x:0, y:h
+		});
+
+		// Add the background image...
+		var bg = new Kinetic.Rect({ fill:"blue", width:w, height:h });
+		layer.add(bg);
+
+		return layer;
+	}
 
 
 }
@@ -325,7 +429,7 @@ var _gameScreen = {
 
 		gridSlotOffset:{ left:0.1, right:0.1, top:0.1, bottom:0.1 },
 		gridSlotAttr:  { x:0, y:0, width:60, height:60, id:null, fill:'green', stroke:'black', strokeWidth:1 },
-		gridSize:      { h:3, v:4 },
+		gridSize:      { h:4, v:5 },
 
 
 
@@ -333,7 +437,10 @@ var _gameScreen = {
 		initializeGridClickable: function(){
 			var group = new Kinetic.Group();
 
-			this.gridSlotAttr.x = 20; this.gridSlotAttr.y = 20; var gridSlot, i=0;
+			// Plot the first point of coords...
+			this.gridSlotAttr.x = 20; this.gridSlotAttr.y = 20; 
+
+			var gridSlot, i=0;
 			for(var vertical = 0; vertical < this.gridSize.v; vertical++){
 
 				for(var horiz = 0; horiz < this.gridSize.h; horiz++){
@@ -375,7 +482,13 @@ var _gameScreen = {
 _app.__init__();
 
 // Input the Apache Cordova actions right here..
+var __cordova = {
 
+	init: function(){
+
+	}
+
+}
 
 
 
