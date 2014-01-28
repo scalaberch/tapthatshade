@@ -27,11 +27,11 @@ var _gamePlay = {
 		
 	},
 
-
-	//TODO: This is the temporary action... Final action is on button click...
 	startGame: function(){
 
-		_gamePlay.gameTimer
+
+		console.log("Starting game...");
+		_board.shuffleBoard(_gamePlay.getRandomCharacter(), 3);
 
 	},
 
@@ -308,14 +308,28 @@ var _app = {
 	// 	For now, it is still an empty array
 	screens: [],
 
+	// Resource Data Structure...
+	resources: {
+
+		__init: function(){
+			console.log("Loading resources...");
+			this.mainMenuBackground = new Image(); this.mainMenuBackground.src = "http://localhost:8888/tapthatshade/App/img/BG.png";
+			this.gameScreenBackground = new Image(); this.gameScreenBackground.src = "http://localhost:8888/tapthatshade/App/img/gameBG.png";
+
+		},
+
+		// Image resources...
+		mainMenuBackground:null,
+		gameScreenBackground:null
+
+
+	},
 
 	// Application Initiator. Call this on start of the application.
 	__init__: function(){
 		// Get the width and height of the screen...
 		var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0];
 		var _width = w.innerWidth || e.clientWidth || g.clientWidth, _height = w.innerHeight|| e.clientHeight|| g.clientHeight;
-
-		_height = 400;
 
 		// Load to app attribute.
 		this.app = new Kinetic.Stage({
@@ -327,19 +341,23 @@ var _app = {
 		// Print out the screen width and height:
 		console.log(_width + " x " + _height);
 
+
+
 		// Load the main layer
 		var mainLayer = new Kinetic.Layer({
 			width:_width, height:_height*2, x:0, y:0, id:"GAME_LAYER"
 		});
 
-
-
-
 		// Create the main menu page
-		var mainMenuPage = new Kinetic.Group({ width:_width, height:_height, x:0, y:0 });
+		var mainMenuPage = new Kinetic.Group({ width:_width, height:_height, x:0, y:0, id:"MAIN_MENU_PAGE" });
 
 			// Put the background on the mainMenuPage
-		var bg = new Kinetic.Rect({ width:mainMenuPage.width(), height:mainMenuPage.height(), fill:"blue" });
+		var bg = new Kinetic.Image({
+	         image: this.resources.mainMenuBackground, width: mainMenuPage.width(), height:mainMenuPage.height()
+		}); mainMenuPage.add(bg);
+
+
+		//new Kinetic.Rect({ width:mainMenuPage.width(), height:mainMenuPage.height(), fill:"blue" });
 
 			// Add the button...
 		var startGameButton = new Kinetic.Rect({ 	width:mainMenuPage.width()*0.6, 
@@ -350,46 +368,45 @@ var _app = {
 
 			// Add the animation...
 		startGameButton.on('touchstart', function(){
-			console.log("Started touch/mouse");
+			
 		}).on('touchend', function(){
-			console.log("Ended touch/mouse");
-
-
-
+			_animation.slideMainMenuUp.start();
 		});
 
 
 
 			// Add to mainMenuPage
-		mainMenuPage.add(bg);
 		mainMenuPage.add(startGameButton);
 
-		console.log(this.app.find('GAME_LAYER'));
-		console.log("hooooops");
-		console.log(mainLayer);
+		//console.log(this.app.find('GAME_LAYER'));
+		//console.log("hooooops");
+		//console.log(mainLayer);
+
+
+
 
 
 
 		// Create the main game screen
-		var gameScreen = new Kinetic.Group({ width:_width, height:_height, x:0, y:_height });
+		var gameScreen = new Kinetic.Group({ width:_width, height:_height, x:0, y:_height, id:"GAME_SCREEN" });
 
 
-			// Put the background on the mainMenuPage
-		bg = new Kinetic.Rect({ width:gameScreen.width(), height:gameScreen.height(), fill:"red", x:0, y:0  });
-
-			// Add to mainMenuPage
-		gameScreen.add(bg);
-
+			// Put the background on the gameScreen
+		bg = new Kinetic.Image({
+	        image: this.resources.gameScreenBackground, width: gameScreen.width(), height:gameScreen.height()
+		}); gameScreen.add(bg);
 
 
 		// Add to layer...
 		mainLayer.add(mainMenuPage);
 		mainLayer.add(gameScreen);
 
+
 		// Add to container
 		this.app.add(mainLayer);
 
-		
+		// Put to screens array for reference in below objects
+		this.screens = [mainLayer];		
 	},
 
 	// Methods...
@@ -428,9 +445,38 @@ var _app = {
 var _animation = {
 
 
+	counter: 0,
 	slideMainMenuUp: new Kinetic.Animation(function(frame) {
-        console.log(frame);
-    }, null)
+        var mainMenu   = _app.screens[0].find('#MAIN_MENU_PAGE')[0],
+        	gameScreen = _app.screens[0].find('#GAME_SCREEN')[0];
+
+        //console.log(obj);
+
+        console.log(frame.time);
+        if (frame.time > "500"){
+        	//this.stop();
+        	//console.log(obj.x());
+
+        	//obj.x(200); obj.draw();
+        	//console.log(obj.x());
+        }
+
+
+        mainMenu.y( mainMenu.y() - 15 );
+        gameScreen.y( gameScreen.y() - 15);
+        mainMenu.draw(); gameScreen.draw();
+
+        _animation.counter++; console.log(_animation.counter);
+
+        if (gameScreen.y() == 0){
+        	this.stop(); _animation.counter = 0;
+        }
+
+        
+        
+
+        //obj.setY(150 * Math.sin(frame.time * 2 * Math.PI / 2000) + 50);
+    }, _app.screens[0])
 
 
 
@@ -505,10 +551,6 @@ var _gameScreen = {
 }
 
 
-
-// Start! :)
-_app.__init__();
-
 // Input the Apache Cordova actions right here..
 var __cordova = {
 
@@ -517,6 +559,30 @@ var __cordova = {
 	}
 
 }
+
+
+
+
+
+
+
+
+// Pre-load all the resources right here...
+_app.resources.__init();
+
+// Map the init function in the onload event...
+window.onload = function(){
+	console.log("Starting application...!");
+	// Start! :)
+	_app.__init__();
+}
+
+
+
+
+
+
+
 
 
 
