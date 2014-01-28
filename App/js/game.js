@@ -144,8 +144,6 @@ var _fb = {
 
 }
 
-
-
 // This is the board object. This holds all the
 // 	data for the game board and the events for
 //	switching the contents
@@ -317,6 +315,8 @@ var _app = {
 		var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0];
 		var _width = w.innerWidth || e.clientWidth || g.clientWidth, _height = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
+		_height = 400;
+
 		// Load to app attribute.
 		this.app = new Kinetic.Stage({
 		    container: 'gameContainer',
@@ -324,23 +324,72 @@ var _app = {
 		    height: _height
 		});
 
-		// Load main menu page and game page...
-		var mainMenuScreen = this.initMainMenuScreen(_width, _height); this.screens.push(mainMenuScreen);
-		var gameMenuScreen = this.initGameScreen(_width, _height); this.screens.push(gameMenuScreen);
+		// Print out the screen width and height:
+		console.log(_width + " x " + _height);
+
+		// Load the main layer
+		var mainLayer = new Kinetic.Layer({
+			width:_width, height:_height*2, x:0, y:0, id:"GAME_LAYER"
+		});
 
 
-		// Call all initiators of pages...
-		//_gameScreen.initAttach_ClickableGrid();
 
-		//this.app.add(_gameScreen._screen);
 
-		console.log(this.appWidth());
-		console.log(this.appHeight());
+		// Create the main menu page
+		var mainMenuPage = new Kinetic.Group({ width:_width, height:_height, x:0, y:0 });
 
-		// Add to the main app...
-		for (var i = 0; i < this.screens.length; i++) {
-			this.app.add(this.screens[i]);
-		};
+			// Put the background on the mainMenuPage
+		var bg = new Kinetic.Rect({ width:mainMenuPage.width(), height:mainMenuPage.height(), fill:"blue" });
+
+			// Add the button...
+		var startGameButton = new Kinetic.Rect({ 	width:mainMenuPage.width()*0.6, 
+													height:20, 
+													x:mainMenuPage.width()*0.2, 
+													y:mainMenuPage.height()*0.1,
+													fill:"green"  });
+
+			// Add the animation...
+		startGameButton.on('touchstart', function(){
+			console.log("Started touch/mouse");
+		}).on('touchend', function(){
+			console.log("Ended touch/mouse");
+
+
+
+		});
+
+
+
+			// Add to mainMenuPage
+		mainMenuPage.add(bg);
+		mainMenuPage.add(startGameButton);
+
+		console.log(this.app.find('GAME_LAYER'));
+		console.log("hooooops");
+		console.log(mainLayer);
+
+
+
+		// Create the main game screen
+		var gameScreen = new Kinetic.Group({ width:_width, height:_height, x:0, y:_height });
+
+
+			// Put the background on the mainMenuPage
+		bg = new Kinetic.Rect({ width:gameScreen.width(), height:gameScreen.height(), fill:"red", x:0, y:0  });
+
+			// Add to mainMenuPage
+		gameScreen.add(bg);
+
+
+
+		// Add to layer...
+		mainLayer.add(mainMenuPage);
+		mainLayer.add(gameScreen);
+
+		// Add to container
+		this.app.add(mainLayer);
+
+		
 	},
 
 	// Methods...
@@ -349,44 +398,7 @@ var _app = {
 
 	// Method: initialize main menu screen
 	initMainMenuScreen: function(w, h){
-		// Initialize Layer...
-		var layer = new Kinetic.Layer({
-			width: w, height: h
-		});
-
-		// Add the background image...
-		var bg = new Kinetic.Rect({ fill:"red", width:w, height:h });
-		layer.add(bg);
-
-		// Add the buttons...
-		var playGameButton = new Kinetic.Rect({ fill:"green", width:w*0.6, height:h*0.10, x:w*0.25, y:h*0.7 });
-
-
-		// Add the animation for the buttons and append to layer...
-		playGameButton.on('mouseup touchend', function(evt){
-			console.log("I mouseup you!");
-
-			// Animate the layer upward, while getting the other layer downward...
-				var amplitude = 150;
-		      var period = 2000;
-		      // in ms
-		      var centerX = stage.width()/2;
-
-
-			var anim = new Kinetic.Animation(function(frame) {
-				// TEMP
-		       _app.screens[0].setX(50 * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
-		    }, _app.app);
-
-		    anim.start();
-
-		}).on('mousedown touchstart', function(){
-			console.log("I mousedown you!");
-		});
-
-
-		layer.add(playGameButton);
-
+		var layer;
 
 		return layer;
 	},
@@ -407,6 +419,19 @@ var _app = {
 
 		return layer;
 	}
+
+
+}
+
+// This is the collective object for the animations... hihihihi :)
+
+var _animation = {
+
+
+	slideMainMenuUp: new Kinetic.Animation(function(frame) {
+        console.log(frame);
+    }, null)
+
 
 
 }
