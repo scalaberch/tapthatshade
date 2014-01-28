@@ -11,7 +11,7 @@ var _gamePlay = {
 
 	isPlaying: false,
 	score:     0,
-	myGuess:   [],
+	myGuess:   0,
 
 	playerStats: {
 		allowableClicks:3,
@@ -30,6 +30,8 @@ var _gamePlay = {
 
 	//TODO: This is the temporary action... Final action is on button click...
 	startGame: function(){
+
+		_gamePlay.gameTimer
 
 	},
 
@@ -196,10 +198,10 @@ var _board = {
 	//		@find: The integer of the character to be find by the player. 
 
 
-	shuffleBoard: function(find){
+	shuffleBoard: function(find, N){
 		// Place the find randomly in the board on N places. 
 		// N depends on the level and the maturity of the game.
-		var places = []; var N = 3; // for now ;)
+		var places = []; 
 
 		var place = 0; this.cleanBoard();
 		for (var p=0; p<N; p++){
@@ -223,7 +225,6 @@ var _board = {
 			// 	the _characters indeces except the current element.
 			var random = 2; // Insert implementaiton here
 
-
 			if (places.indexOf(n) == -1){
 				this.assignToBoard(n, random);
 			}
@@ -243,6 +244,8 @@ var _board = {
 
 	checkIfGuessCorrect: function(guess, obj){
 		var result = true, board = this.board;
+
+		console.log(board);
 
 		var sortedGuesses = guess.sort(), currentIndex;
 		while(result && guess.length > 0){
@@ -264,7 +267,7 @@ var _board = {
 
 var _characters = [
 	
-	{ name:"NONE", value:0, img:"path_to_image/here" },
+	{ name:"NONE", value:0, img:"path_to_image/here", color:"blue" },
 	{ name:"Cheekee", value:10, img:"path_to_image/here" },
 	{ name:"Chaakee", value:12, img:"path_to_image/here" },
 	{ name:"Chuukee", value:12, img:"path_to_image/here" }
