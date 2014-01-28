@@ -11,7 +11,8 @@ var _gamePlay = {
 
 	isPlaying: false,
 	score:     0,
-	myGuess:   0,
+	myGuess:   [],
+	level: 	   3,
 
 	playerStats: {
 		allowableClicks:3,
@@ -27,22 +28,33 @@ var _gamePlay = {
 		
 	},
 
+
+	//TODO: This is the temporary action... Final action is on button click...
+	// Starting on this
+	
 	startGame: function(){
-
-
-		console.log("Starting game...");
-		_board.shuffleBoard(_gamePlay.getRandomCharacter(), 3);
-
+	// this.gameTimer.start(); <-- 
+	_board.shuffleBoard(_gamePlay.getRandomCharacter(0), this.level); // level depends on the players level // -1 is used since 
 	},
 
 
 	// 	Randomly getting a character from the you know :)
 	// 	  Returns the index of the random character... 
 	//	   say: just a random number generator... LOL
-	getRandomCharacter: function(){
+	
+	// This function is also used in getting random characters except the specific character
+	// This randomizes character index except the "find" object variable
+	// This is used to fill the array with different characters indexes 
+	// asside from the "find" object
+	getRandomCharacter: function(except)
+	{
 		var characterListSize = _characters.length;
-
-		return Math.floor( Math.random()*characterListSize );
+		var i;
+		do
+		{
+			i = Math.floor( Math.random()*characterListSize );
+		} while(i==except);
+		return i;
 	},
 
 	// Appending and removing to my guess
@@ -74,7 +86,7 @@ var _gamePlay = {
 	// Do the submission of guess
 	// 	This also handles the recurring action of the game...
 
-//dsaddsdassd
+
 
 	// Game Timer Structure
 	gameTimer: {
@@ -144,6 +156,8 @@ var _fb = {
 
 }
 
+
+
 // This is the board object. This holds all the
 // 	data for the game board and the events for
 //	switching the contents
@@ -175,7 +189,7 @@ var _board = {
 	
 	// Assigns an item to the board.
 	// 	@index: The index of the assigned item in the board.
-	//	@assign: The item to be assigned
+	//	@assign: The item/object to be assigned
 
 	assignToBoard: function(index, assign){
 		this.board[index] = assign;
@@ -196,10 +210,10 @@ var _board = {
 	//		@find: The integer of the character to be find by the player. 
 
 
-	shuffleBoard: function(find, N){
+	shuffleBoard: function(find, number){
 		// Place the find randomly in the board on N places. 
-		// N depends on the level and the maturity of the game.
-		var places = []; 
+		// number or N depends on the level and the maturity of the game.
+		var places = []; var N = number; // for now ;)
 
 		var place = 0; this.cleanBoard();
 		for (var p=0; p<N; p++){
@@ -212,6 +226,7 @@ var _board = {
 			console.log("Has new place! At "+place);
 			this.assignToBoard(place, find);
 			places[p] = place;
+		
 		}
 
 		// Then put the other types of the characters, ignoring the spot
@@ -223,6 +238,7 @@ var _board = {
 			// 	the _characters indeces except the current element.
 			var random = 2; // Insert implementaiton here
 
+
 			if (places.indexOf(n) == -1){
 				this.assignToBoard(n, random);
 			}
@@ -230,20 +246,21 @@ var _board = {
 
 		// For console purposes...
 		this.printBoard();
+		
 		return this.board;
 	},
-
+	
+	
 	// Checks the guess if it is correct... The guess is inside an array of
 	//	integers. Returns a boolean object.
 	//		@guess: The array which contains the guesses. Values are the index of the grid.
 	//					Also, the size of @guess determines how many tries a player have done
 	//					in which is dynamic.
 	//		@obj:   The object in which i will find inside the grid.
+	//				It is the character to check if correct
 
 	checkIfGuessCorrect: function(guess, obj){
 		var result = true, board = this.board;
-
-		console.log(board);
 
 		var sortedGuesses = guess.sort(), currentIndex;
 		while(result && guess.length > 0){
@@ -265,7 +282,7 @@ var _board = {
 
 var _characters = [
 	
-	{ name:"NONE", value:0, img:"path_to_image/here", color:"blue" },
+	{ name:"NONE", value:0, img:"path_to_image/here" },
 	{ name:"Cheekee", value:10, img:"path_to_image/here" },
 	{ name:"Chaakee", value:12, img:"path_to_image/here" },
 	{ name:"Chuukee", value:12, img:"path_to_image/here" }
@@ -308,22 +325,6 @@ var _app = {
 	// 	For now, it is still an empty array
 	screens: [],
 
-	// Resource Data Structure...
-	resources: {
-
-		__init: function(){
-			console.log("Loading resources...");
-			this.mainMenuBackground = new Image(); this.mainMenuBackground.src = "http://localhost:8888/tapthatshade/App/img/BG.png";
-			this.gameScreenBackground = new Image(); this.gameScreenBackground.src = "http://localhost:8888/tapthatshade/App/img/gameBG.png";
-
-		},
-
-		// Image resources...
-		mainMenuBackground:null,
-		gameScreenBackground:null
-
-
-	},
 
 	// Application Initiator. Call this on start of the application.
 	__init__: function(){
@@ -338,75 +339,23 @@ var _app = {
 		    height: _height
 		});
 
-		// Print out the screen width and height:
-		console.log(_width + " x " + _height);
+		// Load main menu page and game page...
+		var mainMenuScreen = this.initMainMenuScreen(_width, _height); this.screens.push(mainMenuScreen);
+		var gameMenuScreen = this.initGameScreen(_width, _height); this.screens.push(gameMenuScreen);
 
 
+		// Call all initiators of pages...
+		//_gameScreen.initAttach_ClickableGrid();
 
-		// Load the main layer
-		var mainLayer = new Kinetic.Layer({
-			width:_width, height:_height*2, x:0, y:0, id:"GAME_LAYER"
-		});
+		//this.app.add(_gameScreen._screen);
 
-		// Create the main menu page
-		var mainMenuPage = new Kinetic.Group({ width:_width, height:_height, x:0, y:0, id:"MAIN_MENU_PAGE" });
+		console.log(this.appWidth());
+		console.log(this.appHeight());
 
-			// Put the background on the mainMenuPage
-		var bg = new Kinetic.Image({
-	         image: this.resources.mainMenuBackground, width: mainMenuPage.width(), height:mainMenuPage.height()
-		}); mainMenuPage.add(bg);
-
-
-		//new Kinetic.Rect({ width:mainMenuPage.width(), height:mainMenuPage.height(), fill:"blue" });
-
-			// Add the button...
-		var startGameButton = new Kinetic.Rect({ 	width:mainMenuPage.width()*0.6, 
-													height:20, 
-													x:mainMenuPage.width()*0.2, 
-													y:mainMenuPage.height()*0.1,
-													fill:"green"  });
-
-			// Add the animation...
-		startGameButton.on('touchstart', function(){
-			
-		}).on('touchend', function(){
-			_animation.slideMainMenuUp.start();
-		});
-
-
-
-			// Add to mainMenuPage
-		mainMenuPage.add(startGameButton);
-
-		//console.log(this.app.find('GAME_LAYER'));
-		//console.log("hooooops");
-		//console.log(mainLayer);
-
-
-
-
-
-
-		// Create the main game screen
-		var gameScreen = new Kinetic.Group({ width:_width, height:_height, x:0, y:_height, id:"GAME_SCREEN" });
-
-
-			// Put the background on the gameScreen
-		bg = new Kinetic.Image({
-	        image: this.resources.gameScreenBackground, width: gameScreen.width(), height:gameScreen.height()
-		}); gameScreen.add(bg);
-
-
-		// Add to layer...
-		mainLayer.add(mainMenuPage);
-		mainLayer.add(gameScreen);
-
-
-		// Add to container
-		this.app.add(mainLayer);
-
-		// Put to screens array for reference in below objects
-		this.screens = [mainLayer];		
+		// Add to the main app...
+		for (var i = 0; i < this.screens.length; i++) {
+			this.app.add(this.screens[i]);
+		};
 	},
 
 	// Methods...
@@ -415,7 +364,44 @@ var _app = {
 
 	// Method: initialize main menu screen
 	initMainMenuScreen: function(w, h){
-		var layer;
+		// Initialize Layer...
+		var layer = new Kinetic.Layer({
+			width: w, height: h
+		});
+
+		// Add the background image...
+		var bg = new Kinetic.Rect({ fill:"red", width:w, height:h });
+		layer.add(bg);
+
+		// Add the buttons...
+		var playGameButton = new Kinetic.Rect({ fill:"green", width:w*0.6, height:h*0.10, x:w*0.25, y:h*0.7 });
+
+
+		// Add the animation for the buttons and append to layer...
+		playGameButton.on('mouseup touchend', function(evt){
+			console.log("I mouseup you!");
+
+			// Animate the layer upward, while getting the other layer downward...
+				var amplitude = 150;
+		      var period = 2000;
+		      // in ms
+		      var centerX = stage.width()/2;
+
+
+			var anim = new Kinetic.Animation(function(frame) {
+				// TEMP
+		       _app.screens[0].setX(50 * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
+		    }, _app.app);
+
+		    anim.start();
+
+		}).on('mousedown touchstart', function(){
+			console.log("I mousedown you!");
+		});
+
+
+		layer.add(playGameButton);
+
 
 		return layer;
 	},
@@ -436,48 +422,6 @@ var _app = {
 
 		return layer;
 	}
-
-
-}
-
-// This is the collective object for the animations... hihihihi :)
-
-var _animation = {
-
-
-	counter: 0,
-	slideMainMenuUp: new Kinetic.Animation(function(frame) {
-        var mainMenu   = _app.screens[0].find('#MAIN_MENU_PAGE')[0],
-        	gameScreen = _app.screens[0].find('#GAME_SCREEN')[0];
-
-        //console.log(obj);
-
-        console.log(frame.time);
-        if (frame.time > "500"){
-        	//this.stop();
-        	//console.log(obj.x());
-
-        	//obj.x(200); obj.draw();
-        	//console.log(obj.x());
-        }
-
-
-        mainMenu.y( mainMenu.y() - 15 );
-        gameScreen.y( gameScreen.y() - 15);
-        mainMenu.draw(); gameScreen.draw();
-
-        _animation.counter++; console.log(_animation.counter);
-
-        if (gameScreen.y() == 0){
-        	this.stop(); _animation.counter = 0;
-        }
-
-        
-        
-
-        //obj.setY(150 * Math.sin(frame.time * 2 * Math.PI / 2000) + 50);
-    }, _app.screens[0])
-
 
 
 }
@@ -551,6 +495,10 @@ var _gameScreen = {
 }
 
 
+
+// Start! :)
+_app.__init__();
+
 // Input the Apache Cordova actions right here..
 var __cordova = {
 
@@ -559,30 +507,6 @@ var __cordova = {
 	}
 
 }
-
-
-
-
-
-
-
-
-// Pre-load all the resources right here...
-_app.resources.__init();
-
-// Map the init function in the onload event...
-window.onload = function(){
-	console.log("Starting application...!");
-	// Start! :)
-	_app.__init__();
-}
-
-
-
-
-
-
-
 
 
 
